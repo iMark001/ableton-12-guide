@@ -1,0 +1,196 @@
+/* По партиям: Serum 2, Diva и FabFilter (только установленные у Артёма: Pro-Q 4, Saturn 2, Volcano 3, Pro-L 2, Twin 3;
+   плюс OTT). Pro-C 2, Pro-MB, Pro-DS, Pro-R 2, Timeless 3 не установлены — вместо них стоковые устройства Live.
+   Названия параметров сверены с Serum 2 User Guide, Diva user guide 1.4.8 и мануалами FabFilter. */
+const FF_REPL = 'не установлен — вместо него';
+[
+  ['sub', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: 'Чистый саб', styles: ['techhouse', 'house', 'garage', 'organic'],
+        params: [['Старт', 'Main Menu → Init Preset'], ['SUB', 'вкл, волна Sine (OCT +1, если слишком низко); OSC A выключить'], ['MIX', 'канал SUB → Direct (обход фильтров и эффектов)'], ['VOICING', 'MONO; для глайда — LEGATO + PORTA 30–60 мс'], ['ENV 1', 'ATK 1–3 мс, SUS максимум, REL 20–50 мс'], ['Не слышно на телефоне', 'волна SUB Triangle или Rounded Rect']],
+        why: 'Direct выводит саб чистым — можно смело перегружать верх патча.' },
+      { kind: 'diva', tool: 'Diva', title: 'Саб с аналоговым характером', styles: ['afro', 'organic', 'downtempo'],
+        params: [['Шаблон', 'INIT Jupe-8 (Dual VCO)'], ['VCO2', 'Sine, ручка MIX до упора к VCO2'], ['VCF Cascade', 'Cutoff 60–75, Res 0, KYBD 50–100'], ['Mode / Glide', 'mono или legato / 10–25'], ['ENV1', 'Attack 0–2, Sustain 100, Decay 10–20'], ['FEEDBACK', 'малые значения — мягкий подъём низа']],
+        why: 'Синус Diva с ключевым слежением фильтра звучит ровно по всей клавиатуре.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '25–30 Hz, 24 dB/oct'], ['High Cut', '200–300 Hz для чистого синуса']], why: 'Убрать инфраниз и случайные гармоники.' },
+      { tool: 'Saturn 2', params: [['Полосы', '2, кроссовер ≈ 100 Hz'], ['Верхняя', 'Warm Tape или Subtle Tube, Drive 15–30%'], ['Нижняя', 'без драйва']], why: 'Саб слышно на маленьких колонках, низ остаётся чистым.' },
+      { tool: 'Utility (Ableton)', params: [['Bass Mono', 'вкл, 100–150 Hz']], why: 'Моно-низ для клуба.' },
+      { tool: 'Pro-Q 4 — «хирургический» сайдчейн', params: [['Полоса', 'dynamic Low Shelf или Bell 40–100 Hz, Range −6…−12 dB'], ['Триггер', 'external side chain от кика']], why: 'Проседает только общая с киком полоса, без «качания» всего звука.' },
+    ],
+    tips: ['Twin 3 (установлен) тоже годится для саба: Sine, моно, Portamento.'],
+  }],
+  ['bass', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: 'Роллинг-бас Tech House', styles: ['techhouse'],
+        params: [['OSC A', 'Basic Shapes, WT POS на пилу, UNISON 1'], ['OSC B', 'та же таблица, меандр, LEVEL 50–60%, UNISON 2, малый DETUNE'], ['Filter 1', 'MG Low 24, Cutoff 180–350 Hz, Res 10–25%, Drive 20–40%, Keytrack вкл'], ['ENV 2 → Cutoff', '+25…+45%: ATK 0, DEC 120–250 мс, SUS минимум'], ['ENV 1', 'ATK 0–1 мс, SUS 60–80%, REL ≈ 30 мс'], ['VOICING', 'MONO вкл, LEGATO выкл — каждая шестнадцатая бьёт заново'], ['Macro 1', 'Cutoff + глубина ENV 2 — автоматизируй в подъёме']],
+        why: 'Крошечный зазор между нотами и перезапуск огибающей — суть «роллинга».' },
+      { kind: 'diva', tool: 'Diva', title: 'Роллинг-бас (Moog-характер)', styles: ['techhouse', 'house'],
+        params: [['Шаблон', 'INIT Minimono (Triple VCO + Ladder)'], ['OSC1 / OSC2', 'пила 16\' / меандр 16\' или 8\', DETUNE 0.05–0.1'], ['MIXER', 'OSC1 100, OSC2 60–70'], ['Ladder', 'Cutoff 55–70, Emphasis 15–30, ENV2 → cutoff +30…+45'], ['ENV2 / ENV1', 'A 0, D 30–40, S 0 / A 0, D 45–55, S 70–80'], ['Mode / FEEDBACK', 'mono / 10–20 — плотность низа']],
+        why: 'Ladder — самый «жирный» фильтр Diva для баса.' },
+      { kind: 'diva', tool: 'Diva', title: 'Офбит-бас house (Juno-характер)', styles: ['house', 'organic'],
+        params: [['Шаблон', 'INIT June-60 (DCO)'], ['Осциллятор', 'PULSE + SUB-OSCILLATOR 50–70'], ['Cascade', 'Cutoff 50–65, Res 10–20, ENV2 → cutoff 25–35'], ['ENV2 / ENV1', 'A 0, D 25–35, S 0 / D 40, S 50–60']],
+        why: 'Короткие «пыхи» на офбите в духе классики 90-х.' },
+      { kind: 'serum', tool: 'Serum 2', title: 'Reese для techno и UKG', styles: ['techno', 'garage', 'melodic'],
+        params: [['OSC A', 'таблица Reese (папка Digital) или пила'], ['OSC B', 'пила, FINE +10…+20 центов'], ['UNISON', '2–3, MODE Linear, DETUNE 0.10–0.20, WIDTH 0–30%'], ['Filter', 'MG Low 24, Cutoff 300–800 Hz'], ['LFO 1', 'FREE, BPM, 2–4 такта → подстройка OSC B или Cutoff, 5–10%'], ['FX', 'Distortion Diode 1 или Overdrive 30% → Compressor MULTIBAND (лёгкий); SUB → Direct']],
+        why: 'Биение расстроенных пил делает бас живым без новых нот.' },
+      { kind: 'diva', tool: 'Diva', title: '«Фазовый» техно-бас', styles: ['techno'],
+        params: [['Шаблон', 'INIT Jupe-8: две пилы, DETUNE VCO2 0.1–0.2'], ['Cascade', 'Cutoff 55–70, Mode mono'], ['FX1 Phaser', 'Type Stoned, Sync вкл, Rate 8–16, Depth 30–50, Feedback 30–50, Wet 30–40']],
+        why: 'Медленный фэйзер на 4 такта даёт гипнотичное движение.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '30–35 Hz'], ['Bell', '−2…−4 dB на 200–350 Hz, Q 1–2']], why: 'Убрать «бубнёж».' },
+      { tool: 'Saturn 2', params: [['Полосы', '2, кроссовер 100–120 Hz'], ['Верх', 'Warm Tape или Gentle Saturation, Drive 20–40%, Presence +2–3']], why: '«Читаемость» баса на телефоне, саб чистый.' },
+      { tool: `Compressor / Glue Compressor (Pro-C 2 ${FF_REPL})`, params: [['Ratio', '4:1'], ['Attack', '3–10 мс'], ['Release', '60–120 мс'], ['GR', '2–4 dB']], why: 'Ровный уровень.' },
+      { tool: 'Volcano 3 — «фильтр-помпа»', params: [['Envelope Generator', 'trigger input Side Chain (от кика) → Cutoff'], ['EG', 'Attack 0, Decay 100–200 мс, Sustain 0']], why: 'Бас темнеет на кике, а не стихает — мягче классической помпы.' },
+      { tool: 'Utility (Ableton)', params: [['Bass Mono', '120 Hz']], why: 'Моно-низ.' },
+    ],
+  }],
+  ['lead', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: '«Гейтованный» лид в духе Anyma', styles: ['melodic'],
+        params: [['OSC A / OSC B', 'пила UNISON 6 / пила UNISON 2'], ['LFO 1', 'ступенчатая форма ≈ 1/16 → LEVEL обоих осцилляторов — рубленый гейт'], ['LFO 2', '1 такт → тонкая подстройка: в середине такта «расстраивается»'], ['LFO 4', '→ Cutoff MG Low 12, медленный проход'], ['FX', 'Chorus → Delay → Reverb, затем EQ и лёгкий OTT ≈ 20%']],
+        why: 'Ритмичный гейт и плавающая подстройка — фирменная «живость» Afterlife.' },
+      { kind: 'serum', tool: 'Serum 2', title: 'House / tech house хук', styles: ['house', 'techhouse'],
+        params: [['OSC A', 'пила, UNISON 7, MODE Super, DETUNE 0.12–0.18'], ['OSC B', 'пила +12'], ['Filter', 'MG Low 12, Cutoff 2–4 kHz; ENV 2 → Cutoff, DEC 250–400 мс'], ['FX', 'Distortion Tube слегка'], ['Слой', 'копия мелодии на квинту (+7) выше']],
+        why: 'Unison 7 — «магическое число» Serum: широко и плотно.' },
+      { kind: 'diva', tool: 'Diva', title: 'Аналоговый лид с глайдом', styles: ['melodic', 'house'],
+        params: [['Шаблон', 'INIT Minimono: три пилы 8\' / 8\' / 4\', DETUNE ±0.05–0.1'], ['Ladder', 'Cutoff 75–90, Emphasis 20–30, ENV2 → cutoff +20'], ['Mode / Glide', 'legato / 15–30, GlideMode time'], ['Вибрато', 'LFO1 + Delay LFO — плавное появление'], ['FX', 'Delay (Left 3, Right 4 шестнадцатых) + Plate Wet 15–25']],
+        why: 'Глайд между нотами даёт «поющую» аналоговую мелодию.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '150–250 Hz'], ['Dynamic Bell', '2–4 kHz, −2…−3 dB — против резкости']], why: 'Чистый низ, без резкости.' },
+      { tool: 'Saturn 2', params: [['Style', 'Warm Tape'], ['Mix', '30%']], why: 'Плотность.' },
+      { tool: 'Volcano 3', params: [['Фильтр', 'LP, style Smooth или Classic'], ['XLFO', 'движение в подъёмах']], why: 'Анимация без автоматизации.' },
+      { tool: `Echo / Hybrid Reverb (Timeless 3 и Pro-R 2 ${FF_REPL})`, params: [['Echo', '1/8 с точкой на Return'], ['Hybrid Reverb', 'Shimmer или Dark Hall на Return']], why: 'Пространство.' },
+    ],
+  }],
+  ['pad', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: 'Широкий пэд', styles: ['melodic', 'organic', 'ambient', 'downtempo'],
+        params: [['OSC A', 'Basic Shapes пила, UNISON 7, MODE Super, DETUNE 0.15–0.25, WIDTH 80–100%'], ['OSC B', 'Solina Viola или SynStringSaw (S2 Tables → Analog), −12, LEVEL 40–50%'], ['Filter', 'MG Low 12, Cutoff 0.8–2 kHz, Res 10–20%, ручка PAN — ширина'], ['ENV 1', 'ATK 0.4–1.5 с, SUS максимум, REL 1.5–3 с; ENV 2 → Cutoff с ATK 2–4 с'], ['LFO 1', 'тип Chaos: Lorenz (медленно) → Cutoff или WT POS, 5–10%'], ['FX', 'Hyper/Dimension → Chorus → Reverb Vintage или Basin → EQ Low Cut 150–250 Hz']],
+        why: 'Chaos-LFO даёт живое неповторяющееся движение, Hyper/Dimension экономит процессор вместо огромного Unison.' },
+      { kind: 'diva', tool: 'Diva', title: 'Гладкий пэд (Jupiter-характер)', styles: ['melodic', 'ambient', 'house'],
+        params: [['Шаблон', 'INIT Jupe-8: VCO1 и VCO2 пилы, DETUNE 0.1–0.2, MIX ≈ 50/50, HPF PRE слегка'], ['Cascade', 'Cutoff 60–80, Res 10–20 — «особенно хорош для больших гладких пэдов»'], ['ENV1 Analogue', 'A 50–65, D 60, S 80–100, R 55–70'], ['Stack', 'Stack 2 + несколько центов; TRIMMERS: Detune Amt и Voice Drift низко'], ['FX', 'Chorus Ensemble Wet 40–60 → Plate (Decay 60–70, Wet 25–35)']],
+        why: 'Cascade и Chorus Ensemble превращают голые пилы в «струнную машину».' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '150–250 Hz'], ['Spectral-полоса', '1–4 kHz, −3…−6 dB, external side chain от вокала'], ['Character', 'Subtle']], why: 'Пэд сам уступает место голосу.' },
+      { tool: 'Volcano 3', params: [['Фильтр', 'LP, Gentle или Smooth'], ['EG', 'от сайдчейна кика → Cutoff — «фильтр-помпа»']], why: 'Пэд «дышит» под кик мягко.' },
+      { tool: `Hybrid Reverb (Pro-R 2 ${FF_REPL})`, params: [['Decay', '3–8 s']], why: 'Глубина.' },
+    ],
+  }],
+  ['pluck', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: 'Синт-плак', styles: ['house', 'melodic', 'garage'],
+        params: [['OSC A', 'Basic Shapes, WT POS между пилой и меандром, UNISON 3–5, DETUNE 0.08–0.12'], ['Filter', 'MG Low 24, Cutoff 300–600 Hz, Res 20–35%, Keytrack вкл'], ['ENV 2 → Cutoff', '+40…+60%: ATK 0, DEC 150–350 мс, SUS минимум'], ['ENV 1', 'DEC 300–600 мс, SUS минимум'], ['FX', 'Delay 1/8 с точкой + Reverb; Velocity → Cutoff слегка']],
+        why: 'Фильтр открывается только в атаке — звук «щипка».' },
+      { kind: 'serum', tool: 'Serum 2 (Multisample)', title: '«Живой» плак для afro и organic', styles: ['afro', 'organic', 'downtempo'],
+        params: [['Осциллятор', 'тип Multisample: Kalimba, Marimba, Balafon, Kora, Oud (Multisamples → Factory)'], ['Filter', 'MG Low 12 с мягкой ENV 2, Chaos-LFO на Cutoff 1–3%'], ['«Дерево»', 'Filter 2 тип Cmb L (Flanges), MIX ≈ 50%']],
+        why: 'Готовые живые инструменты из коробки, а лёгкий хаос даёт ощущение «сыграно руками».' },
+      { kind: 'diva', tool: 'Diva', title: 'Плак (Juno-характер)', styles: ['house', 'organic'],
+        params: [['Шаблон', 'INIT June-60: PULSE + SAWTOOTH, SUB 0–30'], ['Cascade', 'Cutoff 45–60, Res 20–35, ENV2 → cutoff +40…+60'], ['ENV2 / ENV1 (Digital)', 'A 0, D 25–40, S 0 / D 40–55, S 0, R 35–45'], ['FX', 'Chorus Classic Wet 30 → Delay Left 3 / Right 4']],
+        why: 'Цифровые огибающие Diva дают чёткий, быстрый щипок.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '200–300 Hz'], ['Bell', '−2 dB на 400–600 Hz']], why: 'Чистота.' },
+      { tool: 'Saturn 2', params: [['Style', 'Subtle Tape']], why: 'Присутствие.' },
+      { tool: `Echo (Timeless 3 ${FF_REPL})`, params: [['Время', '1/8 с точкой, Ping Pong'], ['Feedback', '25–35%'], ['Фильтр', 'HP 300 Hz / LP 5 kHz']], why: 'Ритмическая глубина.' },
+    ],
+  }],
+  ['arp', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2 (ARP)', title: 'Арп внутри Serum', styles: ['melodic', 'organic'],
+        params: [['ARP', 'вкл, Pattern Up или Up/Down'], ['Transpose', 'диапазон 1–2 октавы'], ['Playback', 'gate 50–70%, chance 80–90% — случайные пропуски'], ['Звук', 'рецепт плака'], ['Альтернатива', 'CLIP-секвенсор со своим piano roll']],
+        why: 'Шанс 80–90% делает повтор «живым».' },
+      { kind: 'diva', tool: 'Diva (Arpeggiator)', title: 'Арп Diva', styles: ['melodic', 'techno'],
+        params: [['Clock', '1/16, Arp вкл, Sync вкл'], ['Mode', 'up+dn 1, Progression serial, Octaves 2'], ['Restart', '8 (совет мануала)'], ['Swing', '0–15 (50% = триоль)'], ['Voice Mode', 'poly — хвосты накладываются, poly2 — один хвост']],
+        why: 'Встроенный арп Diva синхронизирован с тактом.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '70–200 Hz']], why: 'Убрать гул.' },
+      { tool: 'Volcano 3', params: [['Фильтр', 'BP или LP'], ['XLFO', 'Sync, медленный свип (или режим Snap — XLFO как арпеджиатор)']], why: 'Движение в подъёмах.' },
+      { tool: `Echo (Timeless 3 ${FF_REPL})`, params: [['Время', '1/16 или 3/16']], why: 'Melodic techno держится на дилее и реверберации.' },
+    ],
+  }],
+  ['keys', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2 (Multisample)', title: 'Пиано и электропиано', styles: ['house', 'garage', 'downtempo'],
+        params: [['Осциллятор', 'Multisample: Elec.Piano Suitcase, Elec.Piano Wurli, Baby Grand Piano, Upright Piano'], ['Filter', 'MG Low 12, Cutoff 3–6 kHz'], ['Приём Fred again..', 'срез верха + большой реверб — пиано становится текстурой']],
+        why: 'Готовые клавиши прямо в Serum.' },
+      { kind: 'serum', tool: 'Serum 2', title: 'Стэб-аккорд одной нотой', styles: ['house', 'techno', 'techhouse'],
+        params: [['Осцилляторы', 'пила + меандр'], ['UNISON STACK', '«12+7 (1-3x)» — голоса раскладываются на октавы и квинту'], ['Filter', 'MG Low 18, Cutoff 1–2 kHz, ENV 2 DEC 150–250 мс'], ['ENV 1', 'DEC 200–400 мс, SUS минимум'], ['FX', 'Chorus → Reverb']],
+        why: 'Одна клавиша даёт «аккорд» — классика house и techno.' },
+      { kind: 'diva', tool: 'Diva', title: 'Deep house стэб', styles: ['house', 'garage'],
+        params: [['Шаблон', 'INIT Alpha (DCO + Multimode LP4)'], ['Осцилляторы', 'PULSE + SAW'], ['Фильтр', 'Cutoff 55–70'], ['ENV1 Digital', 'D 35–45, S 0'], ['FX', 'Chorus Classic Wet 40–50']],
+        why: 'Мягкий DCO-стэб с хорусом — звук deep house.' },
+      { kind: 'diva', tool: 'Diva', title: 'Орган для house и UKG (Twin rotary)', styles: ['house', 'garage'],
+        params: [['Шаблон', 'INIT Alpha'], ['ENV1', 'Sustain 0, подобрать Decay под «щелчок», затем Sustain 50, Release 0'], ['FX-слоты', 'оба Rotary: первый с высоким Drive и низким Balance, второй — обычный стерео'], ['Скорость', 'на mod wheel']],
+        why: 'Рецепт из мануала Diva: «вращающийся» орган 90-х.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '150–250 Hz'], ['Character', 'Warm']], why: 'Аккорды не спорят с басом.' },
+      { tool: 'Saturn 2', params: [['Style', 'Clean Tape или Warm Tube']], why: 'Тепло.' },
+      { tool: 'Volcano 3 — лёгкая помпа', params: [['EG', 'от сайдчейна кика → Cutoff']], why: 'House-«качка» без компрессора.' },
+    ],
+  }],
+  ['fx', {
+    make: [
+      { kind: 'serum', tool: 'Serum 2', title: 'Райзер', styles: ['house', 'techhouse', 'techno', 'melodic'],
+        params: [['Источники', 'NOISE + OSC A пила UNISON 7'], ['LFO 1', 'режим ENVELOPE (один цикл), BPM, 8 тактов, рампа вверх → Cutoff MG Low 12, высота OSC A (+12), DETUNE'], ['Macro', '= Mix у Reverb'], ['Даунлифтер', 'то же в обратную сторону']],
+        why: 'LFO в режиме ENVELOPE — одноразовый свип ровно на 8 тактов.' },
+      { kind: 'serum', tool: 'Serum 2 (Granular)', title: 'Атмосфера из записи', styles: ['ambient', 'organic', 'downtempo'],
+        params: [['Осциллятор', 'тип Granular (до 256 зёрен) с вокалом или полевой записью: Density, Length, Window'], ['Filter', 'Diffusor — «фазово и размыто»'], ['LFO', 'Chaos: Rossler → Scan'], ['Reverb', 'Basin']],
+        why: 'Гранулярное облако из любого звука.' },
+      { kind: 'diva', tool: 'Diva', title: 'Шумовая атмосфера', styles: ['ambient', 'techno'],
+        params: [['MIXER', 'только NOISE (PINK — больше низа, WHITE — весь спектр)'], ['Фильтр', 'Uhbie с MIX между полосами + LFO2 rand glide'], ['Twin reverb', 'два Plate подряд: первый — хвост, второй — ранние отражения']],
+        why: 'Рецепт «Twin reverb» из мануала Diva.' },
+    ],
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '200–500 Hz']], why: 'FX не забивают низ.' },
+      { tool: 'Volcano 3', params: [['Style', 'Hollow или Metal — «космос»']], why: 'Креативная фильтрация.' },
+      { tool: 'Saturn 2', params: [['Style', 'Smudge или Breakdown на переходах']], why: 'Разрушение для сбивок.' },
+    ],
+  }],
+  ['kick', { ff: [
+    { tool: 'Pro-Q 4', params: [['Low Cut', '20–30 Hz, 24–48 dB/oct'], ['Bell', '−2…−4 dB на 250–400 Hz, Q 1.5–3'], ['Щелчок', '+1…+2 dB на 3–5 kHz при необходимости']], why: 'Убрать «коробку», добавить щелчок.' },
+    { tool: 'Saturn 2', params: [['Полосы', '2, ≈ 120 Hz'], ['Низ', 'Subtle Tube, Drive 5–15%'], ['Верх', 'Warm Tape, Drive 15–30%'], ['HQ', 'вкл']], why: 'Плотность без грязи в сабе.' },
+    { tool: `Compressor / Glue (Pro-C 2 ${FF_REPL})`, params: [['Ratio', '3–4:1'], ['Attack', '10–30 мс — щелчок проходит'], ['Release', '50–100 мс'], ['GR', '1–3 dB']], why: '«Панч».' },
+    { tool: 'Pro-L 2 (по желанию)', params: [['Style', 'Bus'], ['GR', '≤ 1–2 dB']], why: 'Срезать пики.' },
+  ] }],
+  ['clap', { ff: [
+    { tool: 'Pro-Q 4', params: [['Low Cut', '150–250 Hz'], ['Bell', '−2…−3 dB на 400–800 Hz'], ['High Shelf', '+1…+3 dB на 8–10 kHz']], why: 'Чистота и щелчок.' },
+    { tool: 'Saturn 2', params: [['Style', 'Warm Tape'], ['Drive', '15–25%'], ['Mix', '50%']], why: 'Плотность.' },
+    { tool: 'Pro-L 2', params: [['Style', 'Punchy — «хорош на отдельных дорожках»'], ['GR', '1–2 dB']], why: 'Два клэпа в группе — лимитер снимает пики.' },
+  ] }],
+  ['hats', { ff: [
+    { tool: 'Pro-Q 4', params: [['Low Cut', '300–600 Hz (хэты) или 80–150 Hz (конги, бонги)'], ['Spectral-полоса', '7–10 kHz, −3…−6 dB — против «песка»'], ['Де-эссер', `dynamic Bell 6–9 kHz (Pro-DS ${FF_REPL})`]], why: 'Мягкий верх без резкости.' },
+    { tool: 'Saturn 2', params: [['Style', 'Subtle Saturation'], ['Mix', '30%']], why: 'Зерно.' },
+    { tool: 'Volcano 3 (techno)', params: [['Фильтр', 'BP или LP'], ['XLFO', 'Sync 2–4 такта → Cutoff']], why: 'Движение перкуссии.' },
+  ] }],
+  ['drums', { ff: [
+    { tool: 'Glue Compressor (Ableton)', params: [['Ratio', '2 (techno — 4)'], ['Attack', '10 мс (30 — больше панча)'], ['Release', 'A'], ['GR', '1–3 dB']], why: 'Здесь стоковый Glue — отличный выбор.' },
+    { tool: 'Saturn 2', params: [['Style', 'Warm Tape'], ['Mix', '20–40%']], why: 'Характер.' },
+    { tool: 'Pro-L 2', params: [['Style', 'Bus — «glue, pump or squash»'], ['GR', '≤ 1–2 dB']], why: 'Плотность шины.' },
+  ] }],
+  ['vocal', { ff: [
+    { tool: 'Pro-Q 4', params: [['Low Cut', '80–120 Hz'], ['Dynamic Bell', '200–350 Hz, −2…−4 dB'], ['Spectral Bell', '2–5 kHz, −3…−6 dB'], ['Де-эссер', `dynamic Bell 5–8 kHz (Pro-DS ${FF_REPL})`]], why: 'Чистка, которая работает только когда нужно.' },
+    { tool: `Compressor (Pro-C 2 ${FF_REPL})`, params: [['Ratio', '4:1'], ['Attack', '1–5 ms'], ['GR', '3–6 dB']], why: 'Ровный уровень.' },
+    { tool: 'Saturn 2', params: [['Style', 'Gentle Saturation или Warm Tape'], ['Drive', '10–20%'], ['Mix', '20–40%']], why: 'Тепло.' },
+    { tool: `Echo + Hybrid Reverb (Timeless 3, Pro-R 2 ${FF_REPL})`, params: [['Echo', '1/4 или 1/8 с точкой, Ducking вкл'], ['Hybrid Reverb', 'plate, 1.5–3 s']], why: 'Пространство. Fred again..: автоматизируй посыл на реверб в концах фраз.' },
+  ] }],
+  ['mixbus', { ff: [
+    { tool: 'Pro-Q 4', params: [['Low Cut', '100–150 Hz, если баса в группе нет'], ['Spectral-полоса', '1–4 kHz с external side chain от вокала'], ['Character', 'Subtle']], why: 'Музыка сама уступает голосу.' },
+    { tool: `Glue Compressor (Pro-C 2 ${FF_REPL})`, params: [['Ratio', '1.5–2:1'], ['Attack', '30 мс'], ['Release', 'A'], ['GR', '1–2 dB']], why: '«Склейка».' },
+    { tool: 'Saturn 2', params: [['Style', 'Subtle Tape'], ['Mix', '20–30%']], why: 'Плотность.' },
+  ] }],
+  ['master', {
+    ff: [
+      { tool: 'Pro-Q 4', params: [['Low Cut', '20 Hz'], ['Side', 'Low Cut 100–150 Hz только для Side — моно-низ'], ['Правки', 'широкие ±1 dB; Linear Phase только для широких']], why: 'Баланс.' },
+      { tool: `Glue Compressor (Pro-C 2 ${FF_REPL})`, params: [['Ratio', '1.5–2:1'], ['Attack', '30 мс'], ['Release', 'A'], ['GR', '1–2 dB']], why: '«Склейка».' },
+      { tool: 'Saturn 2 (по желанию)', params: [['Style', 'Subtle Tape'], ['Mix', '10–20%']], why: 'Плотность.' },
+      { tool: 'Pro-L 2', params: [['Style', 'Modern (универсальный), Aggressive (tech house, EDM), Dynamic (melodic, afro, organic), Transparent или Safe (ambient, downtempo)'], ['True Peak Limiting', 'вкл, Oversampling 4x'], ['Output', '−1.0 dBTP'], ['Channel Linking', 'Transients 50–75%, Release 100%'], ['GR', 'не больше 3–4 dB на пиках'], ['Loudness', 'шкала Loudness в Pro-L 2 показывает LUFS — то, чего нет в Live']], why: 'Громкость и потолок; заодно измеритель LUFS.' },
+    ],
+    tips: ['Pro-L 2: сравни на мастере Modern, Aggressive и Dynamic с одинаковым подавлением. Tech house обычно любит Aggressive, organic и afro — Dynamic.', 'Diva: работай в Accuracy great, а OfflineAcc поставь best — экспорт будет в лучшем качестве.'],
+  }],
+].forEach(([id, d]) => partAdd(id, d));

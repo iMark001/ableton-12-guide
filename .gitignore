@@ -1,0 +1,16 @@
+# Служебные файлы проекта (только локально)
+CLAUDE.md
+TASKS.md
+MEMORY.md
+START-PROMPT.md
+ref/
+_staging/
+test_*.html
+
+# macOS
+.DS_Store
+
+# Секреты
+.env
+.env.*
+temp_secret.txt
