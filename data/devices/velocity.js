@@ -1,0 +1,101 @@
+/* Velocity — мануал Live 12 (Live MIDI Effect Reference → Velocity). Диапазоны — из заводских пресетов Live 12.4:
+   Out Hi / Out Low 1…127, Lowest и Range 0…127, Random 0…64, Mode — Clip/Gate/Fixed (Fixed подтверждён пресетами Fix …),
+   Drive и Compand — внутренняя шкала −1…+1 (как отображает Live, мануал не говорит — значения словами).
+   Практика — исследование A (6.2 и Pro tip 8). */
+registerDevice({
+  id: 'velocity',
+  pickLabel: 'Задача',
+  what: 'Меняет силу нажатия (velocity, 1–127) входящих нот: сжимает в нужный диапазон, добавляет случайный разброс, делает все ноты одной силы или пропускает только сильные удары. Velocity — это грув: от неё зависят громкость и яркость звука.',
+  when: [
+    'Хэты, перкуссия или арп звучат «машинно» — небольшой Random оживит.',
+    'Ноты сыграны слишком разной силой — сжать динамику.',
+    'Все удары нужны одинаковой силы (Fixed).',
+    'Отдельный слой только от сильных ударов (Gate).',
+    'Клавиатура играет слишком тихо — поднять Out Low.',
+  ],
+  how: [
+    'Поставь Velocity перед инструментом или Drum Rack.',
+    'Out Low и Out Hi — коридор, в котором окажутся все ноты.',
+    'Random — случайный разброс внутри этого коридора.',
+    'Drive сдвигает ноты к громким (+) или тихим (−); Compand растягивает (+) или сжимает (−) динамику.',
+    'Mode: Clip — обрезать, Gate — выкинуть ноты вне диапазона, Fixed — всем одну силу (Out Hi).',
+  ],
+  parts: ['hats', 'keys', 'arp'],
+  controls: [
+    { id: 'outlow', name: 'Out Low', kind: 'knob', min: 1, max: 127, unit: '', range: '1…127', desc: 'Самая тихая сила на выходе.' },
+    { id: 'outhi', name: 'Out Hi', kind: 'knob', min: 1, max: 127, unit: '', range: '1…127', desc: 'Самая громкая сила на выходе. В режиме Fixed — сила всех нот.' },
+    { id: 'random', name: 'Random', kind: 'knob', min: 0, max: 64, unit: '', range: '0…64', desc: 'Случайный разброс: при 50 сила гуляет вверх-вниз до 50 в пределах Out Low…Out Hi. На графике — серая зона.' },
+    { id: 'drive', name: 'Drive', kind: 'knob', min: -100, max: 100, unit: '%', desc: 'Плюс — большинство нот громкие, минус — большинство тихие.' },
+    { id: 'compand', name: 'Compand', kind: 'knob', min: -100, max: 100, unit: '%', desc: 'Плюс — растягивает силу к краям (динамичнее), минус — сжимает к середине (ровнее).' },
+    { id: 'mode', name: 'Mode', kind: 'switch', opts: ['Clip', 'Gate', 'Fixed'], desc: 'Что делать с входящими нотами вне Lowest…Range: Clip — подрезать в диапазон, Gate — удалить, Fixed — всем нотам силу Out Hi.' },
+    { id: 'lowest', name: 'Lowest', kind: 'knob', min: 0, max: 127, unit: '', range: '0…127', desc: 'Нижняя граница входящей силы, которую обрабатываем.' },
+    { id: 'range', name: 'Range', kind: 'knob', min: 0, max: 127, unit: '', range: '0…127', desc: 'Ширина диапазона входящей силы вверх от Lowest.' },
+  ],
+  extra: [
+    { name: 'Operation', range: 'Velocity, Rel. Vel., обе', desc: 'Что менять: силу нажатия (Note On), силу отпускания (Note Off) или обе.' },
+    { name: 'Нейтраль', range: '—', desc: 'Lowest и Out Low = 0, Range и Out Hi = 127 — устройство практически ничего не меняет.' },
+  ],
+  presets: {
+    humanize: { label: 'Очеловечить хэты, перкуссию, арп', icon: '🪇', note: 'Быстрый вариант ручной velocity: сильные доли 110, офбиты ≈ 90, призраки 70–80.', set: [
+      { c: 'random', v: 15, w: '10–20 — живая динамика без хаоса.' },
+      { c: 'outlow', v: 60, w: 'Тихие ноты не пропадают.' },
+      { c: 'outhi', v: 110, w: 'Без резких пиков.' },
+      { c: 'mode', v: 'Clip', w: 'Все ноты проходят.' },
+    ] },
+    livearp: { label: 'Живой арп (organic, downtempo)', icon: '🌿', note: 'Цепочка из исследования: Arpeggiator → Random → Velocity → Collision/Electric.', set: [
+      { c: 'random', v: 20, w: 'Около 20 — как живой музыкант.' },
+      { c: 'outlow', v: 60, w: 'Нижняя граница 60.' },
+      { c: 'outhi', v: 110, w: 'Верхняя 110.' },
+    ] },
+    even: { label: 'Выровнять динамику (как компрессор)', icon: '🎚️', note: 'Как заводской «Compression I»: тихие громче, громкие тише.', set: [
+      { c: 'outlow', v: 33, w: 'Подтягиваем тихие ноты.' },
+      { c: 'outhi', v: 95, w: 'Срезаем самые громкие.' },
+      { c: 'compand', v: -44, t: 'влево (−0.44)', w: 'Сжатие к середине — ровнее.' },
+      { c: 'mode', v: 'Clip', w: 'Все ноты проходят.' },
+    ] },
+    fixed: { label: 'Все ноты одной силы', icon: '📏', note: 'Для техно-баса и саба: ровная velocity около 100 — синт звучит одинаково.', set: [
+      { c: 'mode', v: 'Fixed', w: 'Сила всех нот = Out Hi.' },
+      { c: 'outhi', v: 100, w: 'Около 100 — запас до максимума.' },
+    ] },
+    accents: { label: 'Громче и с напором (Forte)', icon: '💪', note: 'Как заводской «Forte»: большинство нот уходят в громкие.', set: [
+      { c: 'drive', v: 56, t: 'вправо (+0.56)', w: 'Сдвиг к громким значениям.' },
+      { c: 'outlow', v: 12, w: 'Нижняя граница как в пресете.' },
+      { c: 'outhi', v: 127, w: 'Максимум.' },
+    ] },
+    layer: { label: 'Слой только от сильных ударов (Gate)', icon: '🧩', note: 'Ставь в цепочку второго слоя (например, второй клэп в Instrument Rack): он звучит только на акцентах.', set: [
+      { c: 'mode', v: 'Gate', w: 'Ноты вне диапазона удаляются.' },
+      { c: 'lowest', v: 100, w: 'Пропускаем только силу от 100…' },
+      { c: 'range', v: 27, w: '…до 127.' },
+    ] },
+  },
+  styles: {
+    house: { note: 'Живые хэты и стабы, velocity 80–120.', set: [{ c: 'random', v: 15, w: 'House: лёгкий разброс.', only: ['humanize', 'livearp'] }] },
+    techhouse: { note: 'Акценты на офбитах, остальное ровнее.', set: [{ c: 'random', v: 10, w: 'Tech house: чуть-чуть.', only: ['humanize', 'livearp'] }] },
+    techno: { note: 'Механично и ровно — динамика в фильтре, а не в velocity.', set: [{ c: 'random', v: 5, w: 'Techno: почти без разброса.', only: ['humanize', 'livearp'] }] },
+    melodic: { note: 'Арпы с мягким разбросом.', set: [{ c: 'random', v: 12, w: 'Melodic: аккуратно.', only: ['humanize', 'livearp'] }] },
+    afro: { note: 'Перкуссия с сильным разбросом — как живые руки.', set: [{ c: 'random', v: 25, w: 'Afro: 15–25.', only: ['humanize', 'livearp'] }] },
+    organic: { note: 'Живая динамика — основа звука.', set: [{ c: 'random', v: 20, w: 'Organic: около 20.', only: ['humanize', 'livearp'] }] },
+    garage: { note: 'Призраки снейра и хэтов, сильные акценты.', set: [{ c: 'compand', v: 40, t: 'вправо (+0.4)', w: 'Garage: больше контраста акцент/призрак.', only: ['humanize', 'even'] }] },
+    downtempo: { note: 'Мягкая игра, тише.', set: [{ c: 'outhi', v: 100, w: 'Downtempo: без резких пиков.', only: ['humanize', 'livearp', 'accents'] }] },
+    ambient: { note: 'Тихо и мягко.', set: [{ c: 'drive', v: -50, t: 'влево (−0.5)', w: 'Ambient: большинство нот тихие (как пресет Piano).', not: ['layer', 'fixed'] }] },
+  },
+  hacks: [
+    { h: 'Velocity = яркость', t: 'Во многих синтах velocity управляет и фильтром. Random в Velocity меняет не только громкость, но и тембр каждой ноты.' },
+    { h: 'Слои по силе в рэке', t: 'В Instrument Rack есть Velocity Zones: можно раздать разные звуки по силе удара без устройства Velocity.' },
+    { h: 'Инверсия', t: 'Out Low = 127, Out Hi = 1 (заводской «Invert») — сильные удары становятся тихими. Странный, но интересный грув.' },
+    { h: 'Цепочки Core Library', t: 'Рэки Scale Driver (Random → Scale → Velocity) и Echo Note Bounce (Velocity + 4 × Note Echo) — готовые примеры.' },
+  ],
+  factoryFolder: 'Velocity (MIDI Effects)',
+  factory: [
+    { name: 'Add some Random', use: 'живой разброс', vals: [['Random', '30'], ['Out', '1…127']] },
+    { name: 'Compression I', use: 'ровнее', vals: [['Out Low / Hi', '33 / 95'], ['Compand', '−0.44'], ['Drive', '−0.03']] },
+    { name: 'Compression II', use: 'ещё ровнее', vals: [['Out Low / Hi', '45 / 80'], ['Compand', '−0.41']] },
+    { name: 'Dynamic II', use: 'больше контраста', vals: [['Out Low / Hi', '7 / 126'], ['Compand', '+0.71']] },
+    { name: 'Forte', use: 'громче', vals: [['Drive', '+0.56'], ['Out Low / Hi', '12 / 127']] },
+    { name: 'Piano', use: 'тише', vals: [['Drive', '−0.51'], ['Out Low / Hi', '10 / 103']] },
+    { name: 'Fix 64', use: 'все ноты 64', vals: [['Mode', 'Fixed'], ['Out Hi', '64']] },
+    { name: 'Invert', use: 'сильное ↔ слабое', vals: [['Out Low / Hi', '127 / 1']] },
+  ],
+  chain: 'Arpeggiator → Random → Velocity → инструмент. Для барабанов — Velocity перед Drum Rack.',
+  src: [['Мануал Live 12: Velocity', 'https://www.ableton.com/en/live-manual/12/live-midi-effect-reference/#velocity']],
+});

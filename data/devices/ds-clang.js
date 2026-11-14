@@ -1,0 +1,87 @@
+/* DS Clang — мануал Live 12 (Max for Live Devices → DS Clang). Диапазоны — из параметров DS Clang в «DS Drum Rack»
+   (Core Library, Live 12.4): Tone A/B (1st/2nd Tone), Filter, Noise, Repeat (ClaveRepeat), Pitch, Decay — 0…100,
+   Clave Off/On, Volume −70…+6 dB. Единиц в мануале нет — значения словами. */
+registerDevice({
+  id: 'ds-clang',
+  pickLabel: 'Тип звука',
+  what: 'Синтезатор металлической перкуссии: два тона, белый шум и фильтр. Делает ковбелл, клаву (clave) и шумовую перкуссию — «украшения» поверх кика и хэтов.',
+  when: [
+    'Нужен ковбелл в духе драм-машин — акценты в house и techno.',
+    'Клава (clave) с повторами для afro и organic.',
+    'Металлический «звяк» или шумовая перкуссия для техно-грува.',
+    'Перкуссия, которую легко подстроить по высоте.',
+  ],
+  how: [
+    'Поставь DS Clang в Drum Rack (в DS Drum Rack — пэд D2).',
+    'Tone A и Tone B — громкость двух тонов «колокольчика».',
+    'Filter — high-pass и band-pass срез: больше — ярче.',
+    'Noise — сколько белого шума; Clave + Repeat — клава с повторами.',
+    'Pitch — высота, Decay — длина.',
+  ],
+  parts: ['hats'],
+  controls: [
+    { id: 'tonea', name: 'Tone A', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Громкость первого тона ковбелла. В автоматизации — 1st Tone.' },
+    { id: 'toneb', name: 'Tone B', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Громкость второго тона. В автоматизации — 2nd Tone. Баланс двух тонов меняет «металл».' },
+    { id: 'filter', name: 'Filter', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Срез high-pass и band-pass фильтра: больше — больше высоких частот.' },
+    { id: 'noise', name: 'Noise', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Сколько белого шума добавить.' },
+    { id: 'clave', name: 'Clave', kind: 'toggle', desc: 'Режим клавы: включает ручку Repeat — повторы удара.' },
+    { id: 'repeat', name: 'Repeat', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Повторы звука клавы (работает при включённом Clave). В автоматизации — ClaveRepeat.' },
+    { id: 'pitch', name: 'Pitch', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Высота инструмента.' },
+    { id: 'decay', name: 'Decay', kind: 'knob', min: 0, max: 100, unit: '%', desc: 'Длина звука.' },
+    { id: 'volume', name: 'Volume', kind: 'knob', min: -70, max: 6, unit: 'dB', range: '−70…+6 dB', desc: 'Общая громкость инструмента.' },
+  ],
+  extra: [
+    { name: 'Предпрослушка', range: '—', desc: 'Клик в верхней половине дисплея проигрывает звук.' },
+  ],
+  presets: {
+    cowbell: { label: 'Ковбелл (акценты)', icon: '🔔', note: 'Редкие акценты: шаг 15 или конец фразы. Ковбелл быстро надоедает — меньше значит лучше.', set: [
+      { c: 'tonea', v: 75, t: 'много', w: 'Оба тона — классический двухтоновый ковбелл.' },
+      { c: 'toneb', v: 75, t: 'много', w: 'Равный баланс, как в DS Drum Rack.' },
+      { c: 'noise', v: 0, t: 'выкл', w: 'Чистый металл.' },
+      { c: 'clave', v: false, w: 'Обычный удар.' },
+      { c: 'decay', v: 35, t: 'коротко–средне', w: 'Звякнул и затих.' },
+    ] },
+    clave: { label: 'Клава с повторами (afro, organic)', icon: '🪵', note: 'MIDI: рисунок 3-3-2 (шаги 1, 4, 7) поверх прямого кика.', set: [
+      { c: 'clave', v: true, w: 'Включает режим клавы.' },
+      { c: 'repeat', v: 30, t: 'немного', w: 'Короткие «дребезжащие» повторы оживляют удар.' },
+      { c: 'decay', v: 20, t: 'коротко', w: 'Сухой деревянный щелчок.' },
+      { c: 'pitch', v: 60, t: 'выше середины', w: 'Звонче, слышно поверх перкуссии.' },
+    ] },
+    metal: { label: 'Металлический шумовой «звяк» (techno)', icon: '⚙️', set: [
+      { c: 'noise', v: 60, t: 'больше середины', w: 'Шум делает звук индустриальным.' },
+      { c: 'filter', v: 70, t: 'высоко', w: 'Ярко, без низа.' },
+      { c: 'tonea', v: 50, t: 'середина', w: 'Тон остаётся, но не главный.' },
+      { c: 'toneb', v: 20, t: 'мало', w: 'Несимметричный баланс — «грязнее» металл.' },
+      { c: 'decay', v: 25, t: 'коротко', w: 'Ритмичный, не звенит.' },
+    ] },
+    darkperc: { label: 'Глухая шумовая перкуссия', icon: '🌑', set: [
+      { c: 'filter', v: 15, t: 'низко', w: 'Меньше верха — звук глуше.' },
+      { c: 'noise', v: 40, t: 'ниже середины', w: 'Шорох.' },
+      { c: 'pitch', v: 30, t: 'ниже середины', w: 'Ниже и мягче.' },
+      { c: 'decay', v: 20, t: 'коротко', w: 'Ритмичный «тук».' },
+    ] },
+  },
+  styles: {
+    house: { note: 'Ковбелл — классика house-грува, но в меру.', set: [{ c: 'decay', v: 30, t: 'коротко', w: 'House: акцент, а не звон.', only: ['cowbell'] }] },
+    techhouse: { note: 'Короткая перкуссия в груве.', set: [{ c: 'decay', v: 20, t: 'коротко', w: 'Tech house: сухо.' }] },
+    techno: { note: 'Индустриальный металл и шум.', set: [{ c: 'noise', v: 70, t: 'много', w: 'Techno: больше шума.', only: ['metal', 'darkperc'] }] },
+    melodic: { note: 'Перкуссия тихо и в реверберации.', set: [{ c: 'volume', v: -12, w: 'Melodic: на заднем плане.' }] },
+    afro: { note: 'Клава и колокольчики — основа полиритма.', set: [{ c: 'repeat', v: 35, t: 'немного', w: 'Afro: «живой» дребезг клавы.', only: ['clave'] }] },
+    organic: { note: 'Деревянные, мягкие звуки.', set: [{ c: 'filter', v: 40, t: 'ниже середины', w: 'Organic: без резкого верха.' }] },
+    garage: { note: 'Короткие акценты под свинг.', set: [{ c: 'decay', v: 15, t: 'очень коротко', w: 'Garage: не мешает свингу.' }] },
+    downtempo: { note: 'Редкие мягкие акценты.', set: [{ c: 'filter', v: 35, t: 'ниже середины', w: 'Downtempo: теплее.' }] },
+    ambient: { note: 'Металлический звон как редкое событие.', set: [{ c: 'decay', v: 80, t: 'длинно', w: 'Ambient: звон растворяется в реверберации.', only: ['cowbell', 'metal'] }] },
+  },
+  hacks: [
+    { h: 'Ковбелл в тональность', t: 'Подстрой Pitch по Tuner, чтобы основной тон совпал с нотой трека — ковбелл перестанет «фальшивить».' },
+    { h: 'Живая перкуссия', t: 'MIDI-эффект Velocity с Random 15–25 перед Drum Rack — удары разной силы звучат как живой перкуссионист.' },
+    { h: 'Свинг', t: 'Перкуссию свингуй через Groove Pool (Swing 16ths) — кик при этом остаётся ровным.' },
+    { h: 'Предпрослушка', t: 'Клик в верхней половине дисплея проигрывает звук — подбирай баланс Tone A/B на слух.' },
+  ],
+  factoryFolder: 'Core Library → Racks → Drum Racks (DS Drum Rack)',
+  factory: [
+    { name: 'DS Drum Rack — пэд D2', use: 'двухтоновый «колокольчик»', vals: [['Tone A / B', '74 / 74 из 100'], ['Filter', '0'], ['Noise', '0'], ['Clave', 'Off (Repeat 36)'], ['Pitch', '29 из 100'], ['Decay', '34 из 100'], ['Volume', '−15.8 dB']] },
+  ],
+  chain: 'DS Clang → EQ Eight → Send на Reverb или Delay (Echo 1/8 с точкой) — перкуссия «отвечает» сама себе.',
+  src: [['Мануал Live 12: DS Clang', 'https://www.ableton.com/en/live-manual/12/max-for-live-devices/#ds-clang']],
+});

@@ -10,8 +10,9 @@ const BY_ID = Object.fromEntries(CATALOG.map(d => [d.id, d]));
 const home = { q: '', group: '', onlyNew: false };
 
 /* ---------- значки ---------- */
+const inReview = id => !!(window.STAGING && (window.STAGING.ids || []).includes(id));
 function badges(d) {
-  return [d.isNew ? '<span class="badge">NEW в Live 12</span>' : '', d.upd ? '<span class="badge v">обновлён в Live 12</span>' : '',
+  return [inReview(d.id) ? '<span class="badge review">🆕 новое · на проверке</span>' : '', d.isNew ? '<span class="badge">NEW в Live 12</span>' : '', d.upd ? '<span class="badge v">обновлён в Live 12</span>' : '',
     d.m4l ? '<span class="badge g" title="Устройство на Max for Live, входит в Suite">M4L</span>' : '',
     d.ready ? '' : '<span class="badge soon">разбор готовится</span>'].join('');
 }
@@ -25,6 +26,7 @@ function miniClock() {
 }
 function renderHome(scrollTo) {
   setNav('home');
+  delete app.dataset.dev;
   document.title = 'Ableton Live 12 — гид по устройствам';
   const newCount = CATALOG.filter(d => d.isNew).length, readyCount = CATALOG.filter(d => d.ready).length;
   app.innerHTML = `
@@ -34,7 +36,7 @@ function renderHome(scrollTo) {
       <h1>Каждое устройство Live 12 — <span class="grad">понятно и по шагам</span></h1>
       <p>Для чего нужно, когда включать и как крутить ручки. Выбери устройство, партию и стиль — гид выставит точные значения и объяснит каждое.</p>
       <div class="steps"><span><b>1</b>Устройство</span><span><b>2</b>Партия</span><span><b>3</b>Стиль</span><span><b>✓</b>Ручки + лайфхаки</span></div>
-      <p class="muted small">Готово разборов: ${readyCount} из ${CATALOG.length}. Остальные выходят партиями по группам.</p>
+      <p class="muted small">${readyCount === CATALOG.length ? `Разобраны все ${CATALOG.length} устройств: ручки, настройки под партию и стиль, заводские пресеты, лайфхаки.` : `Готово разборов: ${readyCount} из ${CATALOG.length}. Остальные выходят партиями по группам.`}</p>
     </div>
     <a class="promo" href="midi.html">${miniClock()}<div><span class="badge">Новое</span><b>MIDI: ноты, аккорды, тональности</b>
       <p>Хроматический круг-часы, аккорды-фигуры, определение тональности .mid, совместимость тональностей.</p><span class="go">Открыть →</span></div></a>
@@ -57,7 +59,7 @@ function renderHome(scrollTo) {
     $$('#groups .chip').forEach(c => c.classList.toggle('on', c === b));
     renderList();
   });
-  if (scrollTo) setTimeout(() => $('#' + scrollTo)?.scrollIntoView({ behavior: 'smooth' }), 60);
+  if (scrollTo) setTimeout(() => document.getElementById(scrollTo)?.scrollIntoView({ behavior: 'smooth' }), 60);
   else window.scrollTo({ top: 0 });
 }
 function matches(d) {
@@ -73,20 +75,21 @@ function renderList() {
     if (!items.length) return '';
     return `<section class="grp" id="g-${g.id}" style="--gc:${g.color}">
       <div class="sec-h"><div><h2><span class="gi">${g.icon}</span>${esc(g.name)}</h2><p>Партия ${G[g.id].n} · ${items.length} ${items.length === 1 ? 'устройство' : items.length < 5 ? 'устройства' : 'устройств'}</p></div></div>
-      <div class="dgrid">${items.map((d, i) => `<a class="dcard ${d.ready ? 'ready' : ''}" href="#d-${d.id}" style="animation-delay:${i * 35}ms">
+      <div class="dgrid">${items.map((d, i) => `<a class="dcard ${d.ready ? 'ready' : ''} ${inReview(d.id) ? 'review' : ''}" href="#d-${d.id}" style="animation-delay:${i * 35}ms">
         <div class="dh"><b>${esc(d.name)}</b><span class="go">→</span></div><p>${esc(d.tagline)}</p><div class="bdg">${badges(d)}</div></a>`).join('')}</div></section>`;
   }).join('');
   box.innerHTML = html || '<div class="empty"><span class="big">🔎</span>Ничего не нашлось. Попробуй английское название устройства.</div>';
 }
 
 /* ---------- страница устройства ---------- */
-function renderDevice(id) {
+function renderDevice(id, inst, style) {
   const d = BY_ID[id];
   if (!d) return renderHome();
   setNav('');
   document.title = `${d.name} — гид Ableton Live 12`;
   const g = G[d.group];
-  if (d.ready && window.DeviceView) return window.DeviceView.render(app, d);
+  if (d.ready && window.DeviceView) return window.DeviceView.render(app, d, inst, style);
+  delete app.dataset.dev;
   app.innerHTML = `<div class="view" style="--pc:${g.color}">
     <a class="back" href="#g-${g.id}">← ${esc(g.name)}</a>
     <section class="phero soon-hero">
@@ -107,13 +110,20 @@ function renderDevice(id) {
 function setNav(k) { $$('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === k)); }
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
-  if (h.startsWith('d-')) renderDevice(h.slice(2));
+  if (h.startsWith('d-')) { const [id, inst, style] = h.slice(2).split('/'); renderDevice(id, inst, style); }
   else if (h.startsWith('p-') && window.PartsPage) { setNav(''); window.PartsPage.page(app, h.slice(2)); window.scrollTo({ top: 0 }); }
   else if (h === 'parts') { if ($('#list')) $('#parts')?.scrollIntoView({ behavior: 'smooth' }); else renderHome('parts'); }
-  else if (h.startsWith('g-')) { if ($('#list')) $('#' + h)?.scrollIntoView({ behavior: 'smooth' }); else renderHome(h); }
+  else if (h.startsWith('g-')) { if ($('#list')) document.getElementById(h)?.scrollIntoView({ behavior: 'smooth' }); else renderHome(h); }
   else renderHome();
 }
+let io = null;
+function observe() {
+  if (io) io.disconnect();
+  if (!('IntersectionObserver' in window)) { $$('.reveal').forEach(n => n.classList.add('in')); return; }
+  io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.1 });
+  $$('.reveal:not(.in)').forEach(n => io.observe(n));
+}
+window.GuideApp = { esc, G, BY_ID, badges, observe };
 addEventListener('hashchange', route);
 route();
-window.GuideApp = { esc, G, BY_ID, badges };
 })();

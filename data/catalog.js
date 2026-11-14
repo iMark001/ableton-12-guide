@@ -6,8 +6,20 @@
 const MANUAL_BASE = 'https://www.ableton.com/en/live-manual/12/';
 const MANUAL_CH = { a: 'live-audio-effect-reference', i: 'live-instrument-reference', m: 'live-midi-effect-reference', x: 'max-for-live-devices', r: 'instrument-drum-and-effect-racks' };
 
-/* Готовые разборы (файл data/devices/<id>.js). Пополняется после каждой партии. */
-const READY = [];
+/* Готовые разборы (файл data/devices/<id>.js). Сейчас готовы все 85; новое устройство — сначала в _staging, после проверки сюда. */
+const READY = [
+  'align-delay', 'amp', 'analog', 'arpeggiator', 'audio-effect-rack', 'auto-filter', 'auto-pan-tremolo',
+  'auto-shift', 'beat-repeat', 'cabinet', 'cc-control', 'channel-eq', 'chord', 'chorus-ensemble', 'collision',
+  'compressor', 'corpus', 'delay', 'drift', 'drum-buss', 'drum-rack', 'drum-sampler', 'ds-clang', 'ds-clap',
+  'ds-cymbal', 'ds-fm', 'ds-hh', 'ds-kick', 'ds-snare', 'ds-tom', 'dynamic-tube', 'echo', 'electric',
+  'envelope-follower', 'envelope-midi', 'eq-eight', 'eq-three', 'erosion', 'expression-control',
+  'external-audio-effect', 'external-instrument', 'filter-delay', 'gate', 'glue-compressor', 'grain-delay',
+  'hybrid-reverb', 'impulse', 'instrument-rack', 'lfo', 'limiter', 'looper', 'meld', 'midi-effect-rack',
+  'midi-monitor', 'mpe-control', 'multiband-dynamics', 'note-echo', 'note-length', 'operator', 'overdrive', 'pedal',
+  'phaser-flanger', 'pitch', 'random', 'redux', 'resonators', 'reverb', 'roar', 'sampler', 'saturator', 'scale',
+  'shaper', 'shaper-midi', 'shifter', 'simpler', 'spectral-resonator', 'spectral-time', 'spectrum', 'tension',
+  'tuner', 'utility', 'velocity', 'vinyl-distortion', 'vocoder', 'wavetable',
+];
 
 const CATALOG = [
   /* 1. Динамика */
@@ -111,6 +123,6 @@ const CATALOG = [
     id, name, group, tagline,
     manual: `${MANUAL_BASE}${MANUAL_CH[ch]}/#${anchor || id}`,
     isNew: flags.includes('new'), upd: flags.includes('upd'), card: flags.includes('card'), m4l: ch === 'x',
-    ready: READY.includes(id),
+    ready: READY.includes(id) || (typeof window !== 'undefined' && (window.READY_EXTRA || []).includes(id)),
   };
 });

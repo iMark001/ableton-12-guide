@@ -1,0 +1,101 @@
+/* Expression Control — мануал Live 12 (Max for Live Devices → Expression Control). Параметры — из экземпляров
+   Expression Control в рэках Core Library (MIDI to MPE, Arp Variations; Live 12.4): 5 вкладок, Source — 10 источников,
+   Modulation Amount −100…+100 %, Random Amount 1…100, Increment Steps 1…32, Smoothing Rise/Fall 0…1000 ms, Smoothing Log/Lin.
+   Отдельной папки заводских пресетов нет. */
+registerDevice({
+  id: 'expression-control',
+  pickLabel: 'Задача',
+  what: 'Модулятор, который превращает жесты исполнителя в движение ручек: силу удара (velocity), колесо модуляции, питч-бенд, давление, высоту ноты, педаль, а также случайность и счётчик нот. Пять вкладок — пять источников, каждый можно направить на любые параметры Live.',
+  when: [
+    'Сильнее удар — ярче звук: velocity на фильтр.',
+    'Колесо модуляции или педаль экспрессии должны управлять любой ручкой.',
+    'Каждая нота чуть другая: Random на тембр или панораму.',
+    'Звук меняется шаг за шагом с каждой нотой (Increment).',
+    'MPE-контроллер: слайд и давление на параметры синта.',
+  ],
+  how: [
+    'Поставь Expression Control перед инструментом.',
+    'Во вкладке выбери MIDI Input Source (например, Velocity).',
+    'Нажми Map и кликни параметр-цель.',
+    'Modulate — модуляция добавляется к ручке; Remote Control — ручка полностью у устройства (Min/Max).',
+    'Форма кривой (линейная или S-образная) и сглаживание Rise/Fall — по вкусу.',
+  ],
+  parts: ['keys', 'lead', 'pad'],
+  controls: [
+    { id: 'source', name: 'MIDI Input Source', kind: 'switch', opts: ['Velocity', 'Modwheel', 'Pitchbend', 'Pressure', 'Keytrack', 'Expression', 'Random', 'Increment', 'Slide', 'Sustain'], desc: 'Источник модуляции во вкладке: сила удара, колесо, бенд, давление, высота ноты, педаль экспрессии, случайность, счётчик нот, MPE-слайд, педаль сустейна.' },
+    { id: 'mode', name: 'Modulation', kind: 'switch', opts: ['Modulate', 'Remote Control'], desc: 'Modulate — ручку можно крутить, модуляция добавляется. Remote Control — значение задаёт только устройство.' },
+    { id: 'polarity', name: 'Polarity', kind: 'switch', opts: ['Bipolar', 'Unipolar'], desc: 'Только в Modulate: Bipolar — вокруг базового значения, Unipolar — прибавляется к нему.' },
+    { id: 'amount', name: 'Output Range Max', kind: 'knob', min: -100, max: 100, unit: '%', range: '−100…+100 %', desc: 'В Modulate — насколько сдвинется параметр при максимуме источника. Минус — в обратную сторону.' },
+    { id: 'curve', name: 'Curve Type', kind: 'switch', opts: ['Linear', 'S-shaped'], desc: 'Форма отклика: линейная (Curve A гнёт всю линию) или S-образная (Curve A и B — верх и низ).' },
+    { id: 'random', name: 'Random Amount', kind: 'knob', min: 1, max: 100, unit: '', range: '1…100', desc: 'Только для источника Random: величина случайного отклонения на каждой ноте.' },
+    { id: 'increment', name: 'Increment Steps', kind: 'knob', min: 1, max: 32, unit: '', range: '1…32', desc: 'Только для Increment: за сколько нот проходится весь диапазон. Остановка транспорта сбрасывает счёт.' },
+    { id: 'rise', name: 'Smoothing Rise', kind: 'knob', min: 0, max: 1000, unit: 'ms', range: '0…1000 ms', desc: 'Сглаживание роста значения: больше — плавнее, медленнее.' },
+    { id: 'fall', name: 'Smoothing Fall', kind: 'knob', min: 0, max: 1000, unit: 'ms', range: '0…1000 ms', desc: 'Сглаживание спада значения.' },
+  ],
+  extra: [
+    { name: 'Smoothing Type', range: 'Log / Lin', desc: 'Логарифмическое или линейное сглаживание.' },
+    { name: 'Output Range Min/Max', range: '—', desc: 'В Remote Control — нижняя и верхняя граница значений цели.' },
+    { name: 'Curve A, Curve B, Curve Link, Min/Max, X-Y', range: '—', desc: 'Форма кривой: изгиб, связка половин, границы и положение средней точки S-кривой. Можно тянуть мышью на дисплее.' },
+  ],
+  presets: {
+    velbright: { label: 'Сильнее удар — ярче звук', icon: '💥', note: 'Цель — частота фильтра синта. Живая игра сразу становится выразительнее.', set: [
+      { c: 'source', v: 'Velocity', w: 'Источник — сила удара.' },
+      { c: 'mode', v: 'Modulate', w: 'Базовую частоту фильтра можно крутить как обычно.' },
+      { c: 'polarity', v: 'Unipolar', w: 'Только вверх от базового значения.' },
+      { c: 'amount', v: 50, w: 'Средняя глубина: тихие ноты темнее, сильные — ярче.' },
+      { c: 'curve', v: 'Linear', w: 'Прямая зависимость.' },
+    ] },
+    modwheel: { label: 'Колесо модуляции → любая ручка', icon: '🎡', note: 'Например, Dry/Wet реверба или Drive сатуратора — колесом во время игры.', set: [
+      { c: 'source', v: 'Modwheel', w: 'Источник — колесо модуляции.' },
+      { c: 'mode', v: 'Remote Control', w: 'Ручка целиком у колеса: от Min до Max.' },
+      { c: 'rise', v: 50, w: 'Лёгкое сглаживание — без «ступенек».' },
+      { c: 'fall', v: 50, w: 'То же на спаде.' },
+    ] },
+    random: { label: 'Каждая нота чуть другая (Random)', icon: '🎲', note: 'Цель — фильтр, панорама или Detune: звук «живёт», как у аналога.', set: [
+      { c: 'source', v: 'Random', w: 'Новое случайное значение на каждой ноте.' },
+      { c: 'random', v: 30, w: 'Умеренный разброс.' },
+      { c: 'mode', v: 'Modulate', w: 'Вокруг базового значения.' },
+      { c: 'polarity', v: 'Bipolar', w: 'В обе стороны.' },
+    ] },
+    increment: { label: 'Звук меняется шаг за шагом', icon: '📈', note: 'Цель — фильтр арпа: с каждой нотой он открывается, через N нот — заново. Как в рэке MIDI to MPE (Increment Steps 8–10).', set: [
+      { c: 'source', v: 'Increment', w: 'Счётчик нот.' },
+      { c: 'increment', v: 8, w: 'За 8 нот — весь диапазон.' },
+      { c: 'mode', v: 'Remote Control', w: 'Значение полностью от счётчика.' },
+    ] },
+    keytrack: { label: 'Выше нота — ярче или короче', icon: '🎹', note: 'Цель — фильтр или Decay синта: высокие ноты не «режут», низкие не «гудят».', set: [
+      { c: 'source', v: 'Keytrack', w: 'Источник — высота ноты.' },
+      { c: 'mode', v: 'Modulate', w: 'Добавляется к базовому значению.' },
+      { c: 'amount', v: 30, w: 'Мягкая зависимость.' },
+      { c: 'curve', v: 'S-shaped', w: 'S-кривая — середина клавиатуры почти без изменений.' },
+    ] },
+    slide: { label: 'MPE-слайд на тембр', icon: '🤌', note: 'Пример из мануала: Slide → Filter Freq в Operator. Тонкую настройку кривой даёт MPE Control перед ним.', set: [
+      { c: 'source', v: 'Slide', w: 'Вертикальное движение пальца на MPE-контроллере.' },
+      { c: 'mode', v: 'Modulate', w: 'Базовая частота остаётся под рукой.' },
+      { c: 'rise', v: 20, w: 'Чуть сгладить рывки.' },
+    ] },
+  },
+  styles: {
+    house: { note: 'Velocity на фильтр стабов и пиано.', set: [{ c: 'amount', v: 40, w: 'House: заметная, но мягкая реакция.', only: ['velbright', 'keytrack'] }] },
+    techhouse: { note: 'Increment и Random на фильтр рифа — движение без автоматизации.', set: [{ c: 'increment', v: 16, w: 'Tech house: цикл на 16 нот.', only: ['increment'] }] },
+    techno: { note: 'Медленные циклы и случайность в деталях.', set: [{ c: 'increment', v: 32, w: 'Techno: длинный цикл.', only: ['increment'] }, { c: 'random', v: 15, w: 'Мелкие отклонения.', only: ['random'] }] },
+    melodic: { note: 'Velocity и колесо для выразительных лидов.', set: [{ c: 'amount', v: 60, w: 'Melodic: живая игра лида.', only: ['velbright', 'keytrack'] }] },
+    afro: { note: 'Динамика удара на маримбе и перкуссии.', set: [{ c: 'amount', v: 50, w: 'Afro: сильные удары ярче.', only: ['velbright'] }] },
+    organic: { note: 'Мягкая случайность — «живые» инструменты.', set: [{ c: 'random', v: 20, w: 'Organic: лёгкий разброс.', only: ['random'] }] },
+    garage: { note: 'Velocity на орган и Rhodes.', set: [{ c: 'amount', v: 45, w: 'Garage: призрачные аккорды темнее.', only: ['velbright'] }] },
+    downtempo: { note: 'Плавное сглаживание всех движений.', set: [{ c: 'rise', v: 200, w: 'Downtempo: медленные изменения.', not: ['increment', 'random'] }] },
+    ambient: { note: 'Очень плавные медленные изменения.', set: [{ c: 'rise', v: 600, w: 'Ambient: всё «плывёт».', not: ['increment', 'random'] }, { c: 'fall', v: 600, w: 'Плавный спад.', not: ['increment', 'random'] }] },
+  },
+  hacks: [
+    { h: 'Одна вкладка — один жест', t: 'Пять вкладок: например, Velocity → фильтр, Modwheel → реверб, Random → панорама — всё в одном устройстве.' },
+    { h: 'Сброс Increment', t: 'Счётчик сбрасывается при остановке транспорта — первая нота после старта всегда даёт минимум.' },
+    { h: 'Готовые примеры', t: 'Рэки Arp Variations и MIDI to MPE (Core Library → MIDI Effect Racks) построены на Expression Control.' },
+    { h: 'MPE без MPE-синта', t: 'Связка MPE Control → Expression Control переводит слайд и давление в движение любых ручек.' },
+  ],
+  factoryFolder: 'нет своей папки — внутри MIDI Effect Racks Core Library',
+  factory: [
+    { name: 'MIDI to MPE (рэк, Utility)', use: 'колесо и aftertouch → MPE', vals: [['Источники', 'Modwheel, Pressure, Slide, Random, Increment'], ['Increment Steps', '8 / 10'], ['Random Amount', '50'], ['Smoothing', 'Log, 0 ms']] },
+    { name: 'Arp Variations (рэк, Rhythmic)', use: 'Expression Control + Arpeggiator: вариации арпа', vals: [['Макросы', 'Arp Rate, Steps, Style, Distance']] },
+  ],
+  chain: 'Expression Control → (MPE Control) → инструмент. Цели — любые параметры на дорожке.',
+  src: [['Мануал Live 12: Expression Control', 'https://www.ableton.com/en/live-manual/12/max-for-live-devices/#expression-control']],
+});
