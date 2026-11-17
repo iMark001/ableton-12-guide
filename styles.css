@@ -332,3 +332,10 @@ table.prm td:nth-child(2){color:var(--txt);white-space:normal}
 .dhero .bdg{margin-bottom:10px}
 .badge.review{background:#ff4d6d;color:#fff}
 .dcard.review{outline:2px dashed #ff4d6d;outline-offset:2px}
+/* меню на 4 пункта: на телефоне логотип — только кружок, меню прокручивается */
+@media (max-width:560px){
+  .top .wrap{gap:8px}
+  .logo{font-size:0;gap:0}
+  .top nav{overflow-x:auto;scrollbar-width:none;min-width:0}
+  .top nav::-webkit-scrollbar{display:none}
+}

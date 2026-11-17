@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniLab 3 в Ableton Live 12 — гид</title>
+<meta name="description" content="Arturia MiniLab 3 в Ableton Live 12: подключение, что делает каждая кнопка, как замапить ручки под автоматизацию, готовые раскладки под партии и проверка контроллера в браузере.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2244%22 fill=%22%23ffc93c%22/%3E%3Cpath d=%22M50 16 78 66 22 66Z%22 fill=%22%2314110a%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="midi.css">
+<link rel="stylesheet" href="ctrl.css">
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="dot"></span>Live 12 · Гид</a>
+    <nav>
+      <a href="index.html">Устройства</a>
+      <a href="midi.html">MIDI и ноты</a>
+      <a href="minilab.html" class="on">MiniLab 3</a>
+      <a href="automation.html">Автоматизация</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="mhero">
+    <span class="eyebrow"><i></i>Arturia MiniLab 3 · Ableton Live 12</span>
+    <h1>MiniLab 3 — <span class="grad">ручки, которые пишут автоматизацию</span></h1>
+    <p>Подключение за пару минут, что делает каждая кнопка, как разложить 8 ручек под партию и записывать их движения. Плюс проверка контроллера прямо в браузере.</p>
+  </section>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Разделы" data-order="setup controls layouts tester"></nav>
+  <div id="tab"></div>
+</main>
+
+<footer class="wrap disc">
+  По инструкции Arturia «MiniLab 3 — Live script User Guide», руководству пользователя MiniLab 3, официальной таблице MIDI CC Arturia (support.arturia.com) и встроенному в Live 12.4.6 скрипту MiniLab_3.
+  Маппинг, Takeover Mode и Racks — по мануалу Live 12: <a href="https://www.ableton.com/en/live-manual/12/midi-and-key-remote-control/" target="_blank" rel="noopener">MIDI and Key Remote Control</a>, <a href="https://www.ableton.com/en/live-manual/12/instrument-drum-and-effect-racks/" target="_blank" rel="noopener">Racks</a>.
+  Проверка контроллера работает только в браузере: сигналы никуда не отправляются. Сайт не связан с Ableton AG и Arturia, все торговые марки принадлежат их владельцам.
+</footer>
+
+<script src="data/core.js"></script>
+<script src="data/catalog.js"></script>
+<script src="data/minilab.js"></script>
+<script src="data/practice.js"></script>
+<script src="js/ctrl-core.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/minilab/panel.js"></script>
+<script src="js/minilab/setup.js"></script>
+<script src="js/minilab/controls.js"></script>
+<script src="js/minilab/practice.js"></script>
+<script src="js/minilab/layouts.js"></script>
+<script src="js/minilab/tester.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Автоматизация в Ableton Live 12 — гид</title>
+<meta name="description" content="Автоматизация в Ableton Live 12: что это, как записать движения ручек MiniLab 3, как рисовать и править линии, формы и Simplify, приёмы по стилям — с интерактивным тренажёром.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2244%22 fill=%22%23ffc93c%22/%3E%3Cpath d=%22M50 16 78 66 22 66Z%22 fill=%22%2314110a%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="midi.css">
+<link rel="stylesheet" href="ctrl.css">
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="dot"></span>Live 12 · Гид</a>
+    <nav>
+      <a href="index.html">Устройства</a>
+      <a href="midi.html">MIDI и ноты</a>
+      <a href="minilab.html">MiniLab 3</a>
+      <a href="automation.html" class="on">Автоматизация</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="mhero">
+    <span class="eyebrow"><i></i>Ableton Live 12 · Автоматизация</span>
+    <h1>Автоматизация — <span class="grad">движение, которое Live запомнит</span></h1>
+    <p>Крутишь ручку — Live записывает, и трек сам меняется во времени: фильтр открывается к дропу, реверб растёт в брейке. Как записать ручками MiniLab, как нарисовать и поправить — с тренажёром прямо на странице.</p>
+  </section>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Разделы" data-order="basics record edit recipes"></nav>
+  <div id="tab"></div>
+</main>
+
+<footer class="wrap disc">
+  Факты сверены с мануалом Live 12: <a href="https://www.ableton.com/en/live-manual/12/automation-and-editing-envelopes/" target="_blank" rel="noopener">Automation and Editing Envelopes</a>, <a href="https://www.ableton.com/en/live-manual/12/clip-envelopes/" target="_blank" rel="noopener">Clip Envelopes</a>, <a href="https://www.ableton.com/en/live-manual/12/live-keyboard-shortcuts/" target="_blank" rel="noopener">Keyboard Shortcuts</a>; кнопки MiniLab 3 — по инструкции Arturia и скрипту MiniLab_3 в Live 12.4.6.
+  Приёмы по стилям — стартовые точки из практики сведения: доводите на слух. Сайт не связан с Ableton AG и Arturia, все торговые марки принадлежат их владельцам.
+</footer>
+
+<script src="data/core.js"></script>
+<script src="data/catalog.js"></script>
+<script src="data/minilab.js"></script>
+<script src="data/automation.js"></script>
+<script src="js/ctrl-core.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/minilab/panel.js"></script>
+<script src="js/automation/lane.js"></script>
+<script src="js/automation/tabs.js"></script>
+</body>
+</html>
